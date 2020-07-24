@@ -1,29 +1,30 @@
 package com.arthurmachado.cursomc.controllers;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.arthurmachado.cursomc.domains.Category;
+import com.arthurmachado.cursomc.services.CategoryService;
 
 @RestController
 @RequestMapping(value="/categories")
 public class CategoryController {
 	
-	@GetMapping(value="")
-	public List<Category> list() {
+	@Autowired
+	private CategoryService categoryService;
+	
+	@GetMapping(value="/{id}")
+	public ResponseEntity<Category> find(@PathVariable Integer id) {
 		
-		Category cat1 = new Category(1, "Informática");
-		Category cat2 = new Category(2, "Escritório");
+		Category category = categoryService.search(id);
 		
-		ArrayList<Category> categoryList = new ArrayList<>();
-		
-		categoryList.add(cat1);
-		categoryList.add(cat2);
-		
-		return categoryList;
+		return new ResponseEntity<Category>(category, HttpStatus.OK);
 	}
+	
+	
 }
